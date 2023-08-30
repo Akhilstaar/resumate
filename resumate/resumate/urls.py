@@ -1,8 +1,7 @@
 from django.contrib import admin
-from django.urls import path
-from .views import UploadResume
+from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/upload', UploadResume.as_view(), name='upload'),
+    path('api/resume/', include('resume.urls')),
 ]

@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'resume',
     # 'corsheaders',
     # 'rest_framework_simplejwt.token_blacklist',
 ]
@@ -36,8 +37,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    # 'corsheaders.middleware.CorsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'resumate.urls'
@@ -140,6 +140,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000'
 ]
 
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 # CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOW_CREDENTIALS = False
 
