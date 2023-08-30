@@ -3,11 +3,9 @@ import uuid
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status, serializers
-
+from .parse_resume import *
 from .models import ResumeData
-
 import PyPDF2
-
 
 class ResumeDataSerializer(serializers.Serializer):
     uuid = serializers.CharField()
@@ -34,9 +32,12 @@ class UploadResume(APIView):
                     for chunk in uploaded_file.chunks():
                         destination.write(chunk)
 
-                with open(file_path, "rb") as pdf_file:
-                    pdf_reader = PyPDF2.PdfReader(pdf_file)
-                    res_data = pdf_reader.pages[0].extract_text()
+                res_data = parse_resume(file_path)
+                # print(res_data)
+                # with open(file_path, "rb") as pdf_file:
+                #     pdf_reader = PyPDF2.PdfReader(pdf_file)
+                #     res_data = pdf_reader.pages[0].extract_text()
+
 
                 userdata = ResumeData(uuid=filename, data=res_data)
                 userdata.save()
@@ -55,7 +56,6 @@ class UploadResume(APIView):
                 {'error': 'Something went wrong when uploading the file, please try again.'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-
 
 class ViewAllData(APIView):
     permission_classes = (permissions.AllowAny, )
