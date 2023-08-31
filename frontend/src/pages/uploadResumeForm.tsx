@@ -50,10 +50,8 @@ function UploadResumeForm() {
 
   return (
     <main className="flex justify-center items-center h-full">
-      <h1 style={{"textAlign":"center"}}>Resumate</h1>
-      <hr></hr>
-      <div className="px-5">
-        <form onSubmit={handleSubmit} className="form">
+      <div className="px-5 container">
+        <form onSubmit={handleSubmit} className="form col-6">
           <h2>Upload Resume</h2>
           <div className="form-group">
             <input type="file" accept=".pdf" onChange={handleFileChange} className="form-control" />

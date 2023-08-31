@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/pages/dashboard.js", "src/pages/index.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/pages/dashboard.js", "src/pages/index.js", "src/pages/companydashboard.js", "src/components/modules/UserDetailsOverlay.js", "src/components/modules/ListPredictions.js"],
   "exclude": ["node_modules"]
 }

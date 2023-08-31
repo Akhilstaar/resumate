@@ -10,3 +10,7 @@ class UserAccount(models.Model):
 class ResumeData(models.Model):
     uuid = models.CharField(max_length=100, null=False)
     data = models.JSONField()
+    skill_score = models.IntegerField(default=0)
+    completeness_score = models.IntegerField(default=0)
+    academic_score = models.IntegerField(default=0)
+    overall_score = models.IntegerField(default=0)
