@@ -1,12 +1,12 @@
 import os
 import openai
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import PyPDF2
 from pdfminer.high_level import extract_text
 from .models import ResumeData
 
 # env 
-load_dotenv()
+#load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 gpt_model = os.getenv("GPT_MODEL")
 

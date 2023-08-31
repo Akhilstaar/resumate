@@ -103,3 +103,86 @@ class DeleteAllData(APIView):
                 {'error': str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
+class RegisterSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=20)
+    email = serializers.CharField(max_length=50)
+    password = serializers.CharField(max_length=50)
+    cpassword = serializers.CharField(max_length=50)
+
+
+class RegisterView(APIView):
+    permission_classes = (permissions.AllowAny, )
+
+    def post(self, request):
+        try:
+            serializer = RegisterSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            prediction_data = serializer.validated_data
+
+            username = prediction_data['username']
+            email = prediction_data['email']
+            password = prediction_data['password']
+            cpassword = prediction_data['cpassword']
+
+            if password == cpassword:
+                if len(password) >= 8:
+                    if not User.objects.filter(username=username).exists():
+                        if not User.objects.filter(email=email).exists():
+                            new_user = User.objects.create_user(
+                                username=username,
+                                email=email,
+                                password=password,
+                            )
+                            user_initials = UserAccount(user=new_user)
+                            user_initials.save()
+                            new_user.save()
+
+                            if User.objects.filter(username=username).exists():
+                                return Response(
+                                    {'success': 'Account created successfully'},
+                                    status=status.HTTP_201_CREATED
+                                )
+                            else:
+                                return Response(
+                                    {'error': 'Something went wrong when trying to create account'},
+                                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                                )
+                        else:
+                            return Response(
+                                {'error': 'Email already exists'},
+                                status=status.HTTP_400_BAD_REQUEST
+                            )
+                    else:
+                        return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response(
+                        {'error': 'Password must be at least 8 characters in length'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+            else:
+                return Response(
+                    {'error': 'Passwords do not match'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        except KeyError as e:
+            return Response(
+                {'error': f'Missing key in data: {e}'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except ValueError:
+            return Response(
+                {'error': 'Passwords do not match'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Something went wrong when trying to register account: {e}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to register account'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
