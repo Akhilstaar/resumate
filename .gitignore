@@ -77,7 +77,6 @@ docker-compose*.yml
 Pipfile.lock
 
 # Compiled TypeScript files
-*.js
 *.js.map
 *.d.ts
 *.js.LICENSE.txt
