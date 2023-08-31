@@ -1,6 +1,7 @@
 import uuid
 from django.http import JsonResponse
-
+from django.contrib.auth.models import User
+from .models import UserAccount
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status, serializers
@@ -8,6 +9,7 @@ from .parse_resume import *
 from .models import ResumeData
 import PyPDF2
 from .supermodel import * 
+from datetime import date, timedelta
 
 class ResumeDataSerializer(serializers.Serializer):
     data = serializers.JSONField()
