@@ -1,8 +1,12 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import Footer from "@/components/modules/Footer";
 import Header from "@/components/modules/Header";
 
-const DefaultLayout: React.FC = ({ children }) => {
+interface DefaultLayoutProps {
+  children: ReactNode;
+}
+
+const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />

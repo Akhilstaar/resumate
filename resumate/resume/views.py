@@ -1,4 +1,5 @@
 import uuid
+from django.http import JsonResponse
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,10 +7,10 @@ from rest_framework import permissions, status, serializers
 from .parse_resume import *
 from .models import ResumeData
 import PyPDF2
+from .supermodel import * 
 
 class ResumeDataSerializer(serializers.Serializer):
-    uuid = serializers.CharField()
-    data = serializers.CharField()
+    data = serializers.JSONField()
 
 
 class UploadResume(APIView):
@@ -32,15 +33,15 @@ class UploadResume(APIView):
                     for chunk in uploaded_file.chunks():
                         destination.write(chunk)
 
-                res_data = parse_resume(file_path)
+                # resp = generate_prompt(filename, file_path)
+                # parse_resume(filename, file_path)
+
                 # print(res_data)
                 # with open(file_path, "rb") as pdf_file:
                 #     pdf_reader = PyPDF2.PdfReader(pdf_file)
                 #     res_data = pdf_reader.pages[0].extract_text()
 
-
-                userdata = ResumeData(uuid=filename, data=res_data)
-                userdata.save()
+                # print(resp)
 
                 return Response(
                     {'message': filename},
@@ -57,19 +58,27 @@ class UploadResume(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+
 class ViewAllData(APIView):
     permission_classes = (permissions.AllowAny, )
 
     def get(self, request):
         try:
-            data = ResumeData.objects.all()
-            serializer = ResumeDataSerializer(data, many=True)
+            resume_data_list = [] 
+            all_resume_data = ResumeData.objects.all()
 
+            for resume_data in all_resume_data:
+                # print(resume_data.data)
+                resume_data_list.append({
+                    'uuid': resume_data.uuid,
+                    'json_string': json.loads(resume_data.data)
+                })
+
+            response_data = {'resume_data_list': resume_data_list}
             return Response(
-                {"data": serializer.data},
+                response_data,
                 status=status.HTTP_200_OK
             )
-
         except Exception as e:
             return Response(
                 {'error': str(e)},

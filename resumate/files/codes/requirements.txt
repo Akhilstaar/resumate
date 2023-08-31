@@ -1,0 +1,5 @@
+openai==0.27.10
+pdfminer==20191125
+pdfminer.six==20221105
+PyPDF2==3.0.1
+python-dotenv==1.0.0

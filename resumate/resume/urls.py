@@ -5,5 +5,6 @@ urlpatterns = [
     path('upload', UploadResume.as_view(), name='upload'),
     path('viewalldata', ViewAllData.as_view(), name='viewall'),
     path('deletealldata', DeleteAllData.as_view(), name='deleteall'),
+    # path('admin/listall', ListAll.as_view(), name='listall'),
 
 ]

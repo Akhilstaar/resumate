@@ -9,11 +9,12 @@ from pdfminer.high_level import extract_text
 from nltk.corpus import stopwords
 from datetime import date
 from spacy.matcher import Matcher
+from .models import ResumeData
 
 # loading pre trained model
 model = spacy.load('en_core_web_sm')
 matcher = Matcher(model.vocab)
-# nltk.download('stopwords')
+nltk.download('stopwords')
 
 
 def get_name(resume):
@@ -57,7 +58,7 @@ DEGREE = [
     'ME', 'M.E', 'M.E.', 'MS', 'M.S', 'M.Sc', 'MSc',
     'BTECH', 'B.TECH', 'M.TECH', 'MTECH',
     'BA', 'B.A', 'MA', 'M.A',
-    'SSC', 'HSC', 'CBSE', 'ICSE', 'AISSCE', 'AISSE'
+    'SSC', 'HSC', 'CBSE', 'ICSE', 'AISSCE', 'AISSE', 'BACHELOR', 'BACHELORS'
 ]
 
 UNI_KEYWORDS = ['school', 'university', 'college', 'institute', 'technology',
@@ -198,9 +199,8 @@ def get_github(path):
     return ""
 
 
-def parse_resume(FILEPATH):
+def parse_resume(filename, FILEPATH):
     data = extract_text(FILEPATH)
-
     name = get_name(data)
     email = get_mail(data)
     phno = get_mobno(data)
@@ -209,7 +209,17 @@ def parse_resume(FILEPATH):
     linkedin = get_linkedin(FILEPATH)
     github = get_github(FILEPATH)
 
-    df = {"name": name, "email": email, "mobile_no": phno, "linkedin-profile": linkedin,
-          "github": github, "education": edu, "skills": skills}
+    resume_data = {
+        "name": name,
+        "email": email,
+        "mobile_no": phno,
+        "linkedin-profile": linkedin,
+        "github": github,
+        "education": edu,
+        "skills": skills
+    }
+    json_data = json.dumps(resume_data)
+    userdata = ResumeData(uuid=filename, data=json_data)
+    userdata.save()
 
-    return df
+    return

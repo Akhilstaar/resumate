@@ -4,11 +4,15 @@ function UploadResumeForm() {
   const [file, setFile] = useState<File | null>(null);
 
   // quick fix hack for csrf for now..
-  const [csrfToken, setCsrfToken] = useState<string>("");
+  const [csrfToken, setCsrfToken] = useState<string>(""); 
 
   useEffect(() => {
     const csrftoken = getCookie("csrftoken");
-    setCsrfToken(csrftoken);
+    let token = ""; 
+    if (csrftoken !== undefined) {
+      token = csrftoken;
+    }
+    setCsrfToken(token);
   }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,11 +50,17 @@ function UploadResumeForm() {
 
   return (
     <main className="flex justify-center items-center h-full">
-      <form onSubmit={handleSubmit}>
-        <h2>Upload Resume</h2>
-        <input type="file" accept=".pdf" onChange={handleFileChange} />
-        <button type="submit">Upload</button>
-      </form>
+      <h1 style={{"textAlign":"center"}}>Resumate</h1>
+      <hr></hr>
+      <div className="px-5">
+        <form onSubmit={handleSubmit} className="form">
+          <h2>Upload Resume</h2>
+          <div className="form-group">
+            <input type="file" accept=".pdf" onChange={handleFileChange} className="form-control" />
+            <button type="submit" className="btn btn-primary mt-2">Extract</button>
+          </div>
+        </form>
+      </div>
     </main>
   );
 }
