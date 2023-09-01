@@ -14,3 +14,9 @@ class ResumeData(models.Model):
     completeness_score = models.IntegerField(default=0)
     academic_score = models.IntegerField(default=0)
     overall_score = models.IntegerField(default=0)
+    test_score = models.IntegerField(default=0)
+
+    def update_test_score(self, new_test_score):
+        self.test_score = new_test_score
+        self.save()
+    

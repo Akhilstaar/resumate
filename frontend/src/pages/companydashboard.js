@@ -10,24 +10,9 @@ const CompanyDashboard = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [error, setError] = useState(null);
   const [userdata, setUserData] = useState([]);
-  const [b, setB] = useState(true);
-  const [refreshList, setRefreshList] = useState(false);
-  const [showResumeData, setShowResumeData] = useState(false);
-  const [windowSize, setWindowSize] = useState(getWindowSize());
-
   const router = useRouter();
   const refresh = Cookies.get("refresh_token");
   const access_token = Cookies.get("access_token");
-
-  useEffect(() => {
-    function handleWindowResize() {
-      setWindowSize(getWindowSize());
-    }
-    window.addEventListener("resize", handleWindowResize);
-    return () => {
-      window.removeEventListener("resize", handleWindowResize);
-    };
-  }, []);
 
   useEffect(() => {
     fetch("/api/user/dashboard", {
@@ -39,7 +24,7 @@ const CompanyDashboard = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        setUserData(data.user);
+        setUserData(data);
       })
       .catch((error) => console.error(error));
   }, []);
@@ -108,39 +93,9 @@ const CompanyDashboard = () => {
     }
   };
 
-  const handleShowResumeData = () => {
-    setShowResumeData(true);
-  };
-
-  const handleRefreshList = () => {
-    setRefreshList((prev) => !prev);
-  };
-
   if (!authenticated) {
     return null;
   }
-  let applications_count = 500;
-
-  let temp_users = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      age: 30,
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      age: 25,
-    },
-    {
-      id: 3,
-      name: "Michael Johnson",
-      email: "michael@example.com",
-      age: 40,
-    },
-  ];
 
   return (
     <DefaultLayout title="Dashboard" content="Dashboard page for Resumate">
@@ -151,7 +106,8 @@ const CompanyDashboard = () => {
               <h1 className='display-5 fw-bold col-6'>
                 Company Dashboard
               </h1>
-              <div className="col-6">
+              <div className="col-4"> </div>
+              <div className="col-2">
                 <button className="btn btn-primary mt-3" onClick={handleLogout}>
                   Logout
                 </button>
@@ -161,18 +117,6 @@ const CompanyDashboard = () => {
               Welcome, {userdata.username}
             </div>
 
-          </div>
-          <div className="col-sm-6 col-lg-3">
-            <div className="card">
-              <div className="p-3 d-flex align-items-center">
-                <span className="me-3 stamp stamp-md bg-blue text-white me-3">
-                  <i className="icon fe fe-dollar-sign"></i>
-                </span>
-                <div>
-                  <div className="m-0"><small>Applications received</small> : {applications_count}</div>
-                </div>
-              </div>
-            </div>
           </div>
           <div className='fs-4 mt-3'>
             {/* <UserTable users={temp_users} /> */}
@@ -188,11 +132,3 @@ export default CompanyDashboard;
 
 
 import React from "react";
-
-function getWindowSize() {
-  if (typeof window === "undefined") {
-    return { innerWidth: 0, innerHeight: 0 };
-  }
-  const { innerWidth, innerHeight } = window;
-  return { innerWidth, innerHeight };
-}

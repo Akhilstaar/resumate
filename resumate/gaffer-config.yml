@@ -1,0 +1,8 @@
+processes:
+  - name: resumate
+    command: gunicorn resumate.wsgi:application
+    autostart: true
+    autorestart: true
+    numprocs: 1
+    stdout: /home/aleatoryfreak/logs/gunicorn.log
+    stderr: /home/aleatoryfreak/logs/gunicorn.error.log

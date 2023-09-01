@@ -1,76 +1,174 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { DataGrid } from "@mui/x-data-grid";
+import UserDetailsOverlay from "./UserDetailsOverlay";
+import UserProfile from "./UserProfile";
 
 const ListPredictions = () => {
-  const [showListPrediction, setShowListPrediction] = useState(false);
-  const [getListPrediction, setGetListPrediction] = useState(false);
+  const [showListResume, setShowListPrediction] = useState(false);
+  const [getListResume, setGetListResume] = useState(false);
   const [resumeData, setResumeData] = useState([]);
+  const [updatescore, setUpdateScore] = useState(false);
+  const [selectedUserData, setSelectedUserData] = useState(null);
   const [b, setB] = useState(true);
   const [refreshList, setRefreshList] = useState(false);
+  const [filterText, setFilterText] = useState(""); // State for filtering
+
+  const handleScores = async (event) => {
+    event.preventDefault();
+
+    if (score && accTokenValid) {
+      try {
+        const formData = new FormData();
+        formData.append("test_score", score);
+        formData.append("uuid", userData.uuid);
+
+        const response = await fetch("/api/user/updatescore", {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": Cookies.get("csrftoken"),
+            Authorization: `Bearer ${Cookies.get("access_token")}`,
+          },
+          body: formData,
+        });
+
+        if (response.ok) {
+          console.log("Score uploaded successfully");
+        } else {
+          console.error("Error uploading score");
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
+    } else {
+      console.error("Invalid score or access token.");
+    }
+  };
 
   useEffect(() => {
-    if (getListPrediction || refreshList) {
+    if (updatescore) {
+      axios
+        .post("/api/user/list_predictions", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access_token}`,
+          },
+        })
+        .then((response) => {
+          setShowResumeData(response.data.prediction);
+        })
+        .catch((error) => console.error(error));
+    }
+  }, [access_token, refreshList, showResumeData]);
+
+  useEffect(() => {
+    if (getListResume || refreshList) {
       axios
         .get("/api/resume/viewalldata")
         .then((response) => {
           const data = response.data.resume_data_list;
           setResumeData(data);
-          setRefreshList(false); 
+          setRefreshList(false);
           setShowListPrediction(true);
-          setGetListPrediction(false);
+          setGetListResume(false);
+          setB(true);
         })
         .catch((error) => console.error(error));
     }
-  }, [showListPrediction, refreshList]);
+  }, [showListResume, refreshList]);
 
-  const handleShowPredictions = () => {
+  const handleShowResume = () => {
     setShowListPrediction(true);
-    setGetListPrediction(true);
+    setGetListResume(true);
   };
 
   const handleRefreshList = () => {
-    setRefreshList(true); 
+    setRefreshList(true);
   };
+
+  const handleUserClick = (uuid) => {
+    const user = resumeData.find((user) => user.uuid === uuid);
+    setSelectedUserData(user);
+  };
+
+  const handleCloseOverlay = () => {
+    setSelectedUserData(null);
+  };
+
+  const handleFilterChange = (event) => {
+    setFilterText(event.target.value); // Update filter text when input changes
+  };
+
+  const filteredRows = resumeData.filter((row) => {
+    const lowerCaseFilterText = filterText.toLowerCase();
+    return (
+      row.json_string[0].name.toLowerCase().includes(lowerCaseFilterText) ||
+      row.json_string[0].education[0].gpa
+        .toString()
+        .toLowerCase()
+        .includes(lowerCaseFilterText) ||
+      row.json_string[0].field_of_study
+        .toLowerCase()
+        .includes(lowerCaseFilterText) ||
+      row.overall_score.toString().toLowerCase().includes(lowerCaseFilterText)
+    );
+  });
+
+  const columns = [
+    { field: "name", headerName: "Name", flex: 1 },
+    { field: "cpi", headerName: "CPI", flex: 1 },
+    { field: "branch", headerName: "Branch", flex: 1 },
+    { field: "score", headerName: "Score", flex: 1 },
+  ];
+
+  const rows = filteredRows.map((userdata, index) => ({
+    id: userdata.uuid,
+    name: userdata.json_string[0].name,
+    cpi: userdata.json_string[0].education[0].gpa,
+    branch: userdata.json_string[0].field_of_study,
+    score: userdata.overall_score,
+  }));
 
   return (
     <div className="mt-5">
+      <div className="mb-3">
+        <input
+          type="text"
+          placeholder="Filter by Name, CPI, Branch, Score"
+          value={filterText}
+          onChange={handleFilterChange}
+        />
+      </div>
       <button
         className="btn btn-primary"
-        onClick={showListPrediction ? handleRefreshList : handleShowPredictions}
+        onClick={showListResume ? handleRefreshList : handleShowResume}
       >
-        {showListPrediction ? "Refresh List" : "View All"}
+        {showListResume ? "Refresh List" : "View All"}
       </button>
+      {/* {selectedUserData && (
+        <UserDetailsOverlay
+          userData={selectedUserData}
+          onClose={handleCloseOverlay}
+        />
+      )} */}
+      {selectedUserData && (
+        <UserProfile
+          userData={selectedUserData}
+          onClose={handleCloseOverlay}
+        />
+      )}
 
-      {showListPrediction && (
+
+      {showListResume && (
         <div>
-          <br></br>
+          <br />
           {b ? (
-            <div
-              className="table-wrap mb-5"
-              style={{ height: "245px", overflow: "hidden" }}
-            >
-              <table className="table table-responsive table-hover">
-                <thead className="thead-dark">
-                  <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">CPI</th>
-                    <th scope="col">Branch</th>
-                    <th scope="col">Linkedin</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {resumeData.map((userdata, index) =>
-                    userdata.json_string.map((data, innerIndex) => (
-                      <tr key={index + innerIndex}>
-                        <td>{data.name}</td>
-                        <td>{data.education[0].gpa}</td>
-                        <td>{data.field_of_study}</td>
-                        <td>{data.linkedin_profile_link}</td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+            <div style={{ height: 400, width: "100%" }}>
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                onRowClick={(params) => handleUserClick(params.row.id)}
+              />
             </div>
           ) : (
             <h1>No Predictions done yet !!</h1>

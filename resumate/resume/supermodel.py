@@ -62,20 +62,15 @@ def addresumedatatodb(filename, FILEPATH):
     link = "\n".join(links)
 
     prompt = txt + "\n" + link
-    # print(prompt)
-    # print("==========================================")
-    # print(gpt_model, openai.api_key)
-    response = get_resume(prompt, 0.5, 1500)
-    # response = open("/home/aleatoryfreak/resumate/resumate/files/codes/vll.txt", "r").read()
-    s1, s2, s3, sf = score_resume(response)
-    # print(s1, s2, s3, sf)
-    
+
+    # response = get_resume(prompt, 0.5, 1500)
+    response = open("/home/aleatoryfreak/resumate/resumate/files/codes/vll.txt", "r").read()
+    s1, s2, s3, sf = score_resume(response)  
     ress = '[' + response + ']'
     userdata = ResumeData(uuid=filename, data=ress, skill_score=s1, completeness_score=s2, academic_score=s3, overall_score=sf)
     userdata.save()
 
     return response
-    # return prompt
 
 # resume analysis 
 def get_skill_score(resume_data):

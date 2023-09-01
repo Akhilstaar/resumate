@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UploadResume, ViewAllData, DeleteAllData, RegisterView, Dashboard, AdminLogin, LogoutView
+from .views import UploadResume, ViewAllData, DeleteAllData, RegisterView, Dashboard, AdminLogin, LogoutView, UploadUserData
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 urlpatterns = [
@@ -11,5 +11,6 @@ urlpatterns = [
     path('login', TokenObtainPairView.as_view(), name='login'),
     path('logout', LogoutView.as_view(), name='logout'),
     path('dashboard', Dashboard.as_view(), name='dashboard'),
+    path('updatescore', UploadUserData.as_view(), name='updatescore'),
     # path('admin/listall', ListAll.as_view(), name='listall'),
 ]

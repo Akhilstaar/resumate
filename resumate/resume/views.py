@@ -12,6 +12,7 @@ import PyPDF2
 from .supermodel import * 
 from datetime import date, timedelta
 from rest_framework_simplejwt.tokens import RefreshToken
+from .models import ResumeData
 
 class ResumeDataSerializer(serializers.Serializer):
     data = serializers.JSONField()
@@ -59,37 +60,6 @@ class UploadResume(APIView):
         except Exception as e:
             return Response(
                 {'error': 'Something went wrong when uploading the file, please try again.'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
-
-
-class ViewAllData(APIView):
-    permission_classes = (permissions.AllowAny, )
-
-    def get(self, request):
-        try:
-            resume_data_list = [] 
-            all_resume_data = ResumeData.objects.all()
-
-            for resume_data in all_resume_data:
-                # print(resume_data.data)
-                resume_data_list.append({
-                    'uuid': resume_data.uuid,
-                    'json_string': json.loads(resume_data.data),
-                    'skill_score': resume_data.skill_score,
-                    'completeness_score': resume_data.completeness_score,
-                    'academic_score': resume_data.academic_score,
-                    'overall_score': resume_data.overall_score
-                })
-
-            response_data = {'resume_data_list': resume_data_list}
-            return Response(
-                response_data,
-                status=status.HTTP_200_OK
-            )
-        except Exception as e:
-            return Response(
-                {'error': str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
@@ -244,3 +214,72 @@ class AdminLogin(TokenObtainPairView):
         if(username != "anuj"):
             return Response({'error': 'Invalid Login Attempt.'}, status=400)
         return super().post(request, *args, **kwargs)
+
+
+
+class ViewAllData(APIView):
+    permission_classes = (permissions.AllowAny, )
+
+    def get(self, request):
+        try:
+            resume_data_list = [] 
+            all_resume_data = ResumeData.objects.all()
+
+            for resume_data in all_resume_data:
+                # print(resume_data.data)
+                resume_data_list.append({
+                    'uuid': resume_data.uuid,
+                    'json_string': json.loads(resume_data.data),
+                    'skill_score': resume_data.skill_score,
+                    'completeness_score': resume_data.completeness_score,
+                    'academic_score': resume_data.academic_score,
+                    'overall_score': resume_data.overall_score
+                })
+
+            response_data = {'resume_data_list': resume_data_list}
+            return Response(
+                response_data,
+                status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+class UploadScoreSerializer(serializers.Serializer):
+    test_score = serializers.IntegerField(default=0)
+    uuid = serializers.CharField(max_length=100, allow_blank=False)
+
+class UploadUserData(APIView):
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def post(self, request):
+        try:
+            serializer = UploadScoreSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            validated_data = serializer.validated_data
+
+            uuid = validated_data["uuid"]
+            new_test_score = validated_data["test_score"]
+
+            try:
+                resume_data = ResumeData.objects.get(uuid=uuid)
+            except ResumeData.DoesNotExist:
+                return Response(
+                    {"error": "ResumeData not found for the provided uuid"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            resume_data.update_test_score(new_test_score)
+
+            return Response(
+                {"message": "Test score updated successfully"},
+                status=status.HTTP_204_NO_CONTENT
+            )
+
+        except Exception as e:
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

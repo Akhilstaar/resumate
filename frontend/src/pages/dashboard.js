@@ -9,9 +9,7 @@ const Dashboard = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [error, setError] = useState(null);
   const [userdata, setUserData] = useState([]);
-  const [balance, setBalance] = useState(0);
   const [rating, setRating] = useState(0);
-  const [b, setB] = useState(true);
   const [refreshList, setRefreshList] = useState(false);
   const [showResumeData, setShowResumeData] = useState(false);
   const [windowSize, setWindowSize] = useState(getWindowSize());
@@ -56,7 +54,6 @@ const Dashboard = () => {
         })
         .then((response) => {
           setShowResumeData(response.data.prediction);
-          setB(response.data.b === "1");
         })
         .catch((error) => console.error(error));
     }
@@ -162,8 +159,8 @@ const Dashboard = () => {
                 <div className="col mb-1 p-2">
                   <div className="card bg-white">
                     <div className="card-body">
-                      <h5 className="card-title">Balance</h5>
-                      <h4 className="align-items-center fs-2">{balance} GP</h4>
+                      <h5 className="card-title"></h5>
+                      <h4 className="align-items-center fs-2">{}</h4>
                     </div>
                   </div>
                 </div>
