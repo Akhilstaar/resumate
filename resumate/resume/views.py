@@ -13,14 +13,16 @@ from .supermodel import *
 from datetime import date, timedelta
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import ResumeData
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 class ResumeDataSerializer(serializers.Serializer):
     data = serializers.JSONField()
 
-
 class UploadResume(APIView):
     permission_classes = (permissions.AllowAny, )
 
+    @method_decorator(cache_page(30))  # Rate limit: 1 request per 30 seconds
     def post(self, request):
         try:
             uploaded_file = request.FILES.get('resume')
@@ -39,15 +41,6 @@ class UploadResume(APIView):
                         destination.write(chunk)
 
                 resp = addresumedatatodb(filename, file_path)
-                # parse_resume(filename, file_path)
-
-                # print(res_data)
-                # with open(file_path, "rb") as pdf_file:
-                #     pdf_reader = PyPDF2.PdfReader(pdf_file)
-                #     res_data = pdf_reader.pages[0].extract_text()
-
-                # print(resp)
-
                 return Response(
                     {'message': filename},
                     status=status.HTTP_200_OK
@@ -62,7 +55,6 @@ class UploadResume(APIView):
                 {'error': 'Something went wrong when uploading the file, please try again.'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-
 
 class DeleteAllData(APIView):
     permission_classes = (permissions.AllowAny, )
@@ -211,9 +203,9 @@ class AdminLogin(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         username = request.data.get('username', None)
         password = request.data.get('password', None)
-        if(username != "anuj"):
-            return Response({'error': 'Invalid Login Attempt.'}, status=400)
-        return super().post(request, *args, **kwargs)
+        if(username == "aleatoryfreak" or username=="admin"):
+            return super().post(request, *args, **kwargs)
+        return Response({'error': 'Invalid Login Attempt.'}, status=400)
 
 
 
@@ -233,7 +225,8 @@ class ViewAllData(APIView):
                     'skill_score': resume_data.skill_score,
                     'completeness_score': resume_data.completeness_score,
                     'academic_score': resume_data.academic_score,
-                    'overall_score': resume_data.overall_score
+                    'overall_score': resume_data.overall_score,
+                    'test_score': resume_data.test_score,
                 })
 
             response_data = {'resume_data_list': resume_data_list}
@@ -252,7 +245,7 @@ class UploadScoreSerializer(serializers.Serializer):
     uuid = serializers.CharField(max_length=100, allow_blank=False)
 
 class UploadUserData(APIView):
-    permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (permissions.AllowAny, )
 
     def post(self, request):
         try:

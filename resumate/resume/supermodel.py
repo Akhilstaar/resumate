@@ -8,15 +8,13 @@ import PyPDF2
 from pdfminer.high_level import extract_text
 from .models import ResumeData
 import pandas as pd
+import time
 # env 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 gpt_model = os.getenv("GPT_MODEL")
 skills_db = pd.read_csv("/home/aleatoryfreak/resumate/resumate/files/codes/skills.csv")
-
-# gpt_part
-system_prompt = "You are a resume parser. Your job will be to extract data from the resume into JSON format as per the syntax and instructions below.\n[output only JSON]\n[Formatting Instructions]\n====================\n{\"name\",\n\"phone_number\",\n\"email\",\n\"github_profile_link\",\n\"linkedin_profile_link\",\n\"field_of_study\",\n\"education\": [{\"degree\", \"institute\", \"year\", \"gpa\"}],\n\"achievements\",\n\"skills\": [] (You have to go through whole of resume and extract all possible and relevant skills from it),\n\"relevant_courses\": [],\n\"projects\": [{\"name\", \"organisation\", \"timeline\", \"brief_description\", \"project_link\"}],\n\"position_of_responsibilities\": [{\"position\", \"organisation\", \"tenure\", \"brief_description\"}],\n\"summary\": (You have to summarize the resume summing up all the relevant skills and qualities of the individual within 50 words)}\n===================="
-
+system_function = os.getenv("SYSTEM_FUNCTION")
 
 def get_resume(user_prompt, temp, output_limit):
     response = openai.ChatCompletion.create(
@@ -24,7 +22,7 @@ def get_resume(user_prompt, temp, output_limit):
         messages = [
             {
                 "role": "system",
-                "content": system_prompt
+                "content": system_function
             },
             {
                 "role": "user",
@@ -63,8 +61,8 @@ def addresumedatatodb(filename, FILEPATH):
 
     prompt = txt + "\n" + link
 
-    # response = get_resume(prompt, 0.5, 1500)
-    response = open("/home/aleatoryfreak/resumate/resumate/files/codes/vll.txt", "r").read()
+    response = get_resume(prompt, 0.5, 2500)
+    # response = open("/home/aleatoryfreak/resumate/resumate/files/codes/vll.txt", "r").read()
     s1, s2, s3, sf = score_resume(response)  
     ress = '[' + response + ']'
     userdata = ResumeData(uuid=filename, data=ress, skill_score=s1, completeness_score=s2, academic_score=s3, overall_score=sf)

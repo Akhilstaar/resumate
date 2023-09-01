@@ -22,11 +22,7 @@ export default function ProfilePage({ userData, onClose }) {
         setScore(event.target.value);
     };
 
-    const handleScores = async (event) => {
-        event.preventDefault();
-        // const csrftoken = getCookie("csrftoken");
-        // const access_token = Cookies.get("access_token");
-
+    const handleScores = async () => {
         if (score) {
             try {
                 const formData = new FormData();
@@ -35,11 +31,6 @@ export default function ProfilePage({ userData, onClose }) {
 
                 const response = await fetch("/api/user/updatescore", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        // "X-CSRFToken": csrftoken,
-                        // Authorization: `Bearer ${access_token}`,
-                    },
                     body: formData,
                 });
 
@@ -75,24 +66,29 @@ export default function ProfilePage({ userData, onClose }) {
                                         />
                                     </div>
                                 </div>
-
                                 <div className="card mb-4 mb-lg-0">
-                                    <div className="card-body p-0">
-                                        <ul className="list-group list-group-flush rounded-3">
-                                            <li className="list-group-item d-flex justify-content-between align-items-center p-3">
-                                                <i className="fas fa-globe fa-lg text-warning"></i>
-                                                <span>{parsedData.email}</span>
-                                            </li>
-                                            <li className="list-group-item d-flex justify-content-between align-items-center p-3">
-                                                <i className="fab fa-linkedin fa-lg text-warning"></i>
-                                                <span>{parsedData.github_profile_link}</span>
-                                            </li>
-                                            <li className="list-group-item d-flex justify-content-between align-items-center p-3">
-                                                <i className="fab fa-github fa-lg" style={{ color: '#333333' }}></i>
-                                                <span>{parsedData.linkedin_profile_link}</span>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                <div className="card-body p-0">
+                                    <ul className="list-group list-group-flush rounded-3">
+                                        <li className="list-group-item d-flex justify-content-between align-items-center p-3">
+                                            <i className="fas fa-envelope fa-lg text-warning"></i>
+                                            <a href={`mailto:${parsedData.email}`} className="text-decoration-none">
+                                                Email: {parsedData.email}
+                                            </a>
+                                        </li>
+                                        <li className="list-group-item d-flex justify-content-between align-items-center p-3">
+                                            <i className="fab fa-linkedin fa-lg text-warning"></i>
+                                            <a href={parsedData.linkedin_profile_link} target="_blank" rel="noopener noreferrer" className="text-decoration-none">
+                                                LinkedIn Profile
+                                            </a>
+                                        </li>
+                                        <li className="list-group-item d-flex justify-content-between align-items-center p-3">
+                                            <i className="fab fa-github fa-lg" style={{ color: '#333333' }}></i>
+                                            <a href={parsedData.github_profile_link} target="_blank" rel="noopener noreferrer" className="text-decoration-none">
+                                                GitHub Profile
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                                 </div>
 
                                 <div className="card mb-4 mb-lg-0">
@@ -151,11 +147,11 @@ export default function ProfilePage({ userData, onClose }) {
                                         <div className="card mb-4 mb-md-0">
                                             <div className="card-body">
                                                 <p className="card-text mb-4">Skills</p>
-                                                {parsedData.skills.map((skill, index) => (
-                                                    <p className="card-text mb-1" style={{ fontSize: '.77rem' }}>
-                                                        <span className="px-2 border border-success" key={index}>{skill}</span>
-                                                    </p>
-                                                ))}
+                                                <div className="d-flex flex-wrap">
+                                                    {parsedData.skills.map((skill, index) => (
+                                                        <span className="border border-success m-1 p-1" key={index}>{skill}</span>
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -167,12 +163,12 @@ export default function ProfilePage({ userData, onClose }) {
 
                                                 <p className="card-text mt-4 mb-1" style={{ fontSize: '0.77rem' }}>Overall Score: {userData.overall_score}</p>
                                                 <div className="progress rounded">
-                                                    <div className="progress-bar" role="progressbar" style={{ width: `${userData.overall_score}%` }} aria-valuenow={userData.overall_score} aria-valuemin="0" aria-valuemax="100">{parsedData.overall_score}%</div>
+                                                    <div className="progress-bar" role="progressbar" style={{ width: userData.overall_score + '%' }} aria-valuenow={userData.overall_score} aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
 
                                                 <p className="card-text mb-1" style={{ fontSize: '.77rem' }}>Completeness Score: {userData.completeness_score}</p>
                                                 <div className="progress rounded">
-                                                    <div className="progress-bar" role="progressbar" style={{ width: userData.completeness_score+'%' }} aria-valuenow={userData.completeness_score} aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div className="progress-bar" role="progressbar" style={{ width: userData.completeness_score + '%' }} aria-valuenow={userData.completeness_score} aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
 
                                                 <p className="card-text mt-4 mb-1" style={{ fontSize: '.77rem' }}>Skills Score; {userData.skill_score}</p>
@@ -184,6 +180,12 @@ export default function ProfilePage({ userData, onClose }) {
                                                 <div className="progress rounded">
                                                     <div className="progress-bar" role="progressbar" style={{ width: userData.academic_score + '%' }} aria-valuenow={userData.academic_score} aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
+
+                                                <p className="card-text mt-4 mb-1" style={{ fontSize: '.77rem' }}>Test Score: {userData.test_score}</p>
+                                                <div className="progress rounded">
+                                                    <div className="progress-bar" role="progressbar" style={{ width: userData.test_score + '%' }} aria-valuenow={userData.test_score} aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -196,23 +198,23 @@ export default function ProfilePage({ userData, onClose }) {
                                                 <p className="card-text mb-4">Projects: </p>
                                                 <ul>
                                                     {userData.json_string[0].projects.map((project, index) => (
-                                                    <li key={index}>
-                                                        <strong>Name:</strong> {project.name}
-                                                        <br />
-                                                        <strong>Organisation:</strong> {project.organisation}
-                                                        <br />
-                                                        <strong>Timeline:</strong> {project.timeline}
-                                                        <br />
-                                                        <strong>Brief Description:</strong> {project.brief_description}
-                                                        <br />
-                                                        <strong>Project Link:</strong>{' '}
-                                                        {project.project_link ? (
-                                                        <a href={project.project_link}>{project.project_link}</a>
-                                                        ) : (
-                                                        'N/A'
-                                                        )}
-                                                        <br />
-                                                    </li>
+                                                        <li key={index}>
+                                                            <strong>Name:</strong> {project.name}
+                                                            <br />
+                                                            <strong>Organisation:</strong> {project.organisation}
+                                                            <br />
+                                                            <strong>Timeline:</strong> {project.timeline}
+                                                            <br />
+                                                            <strong>Brief Description:</strong> {project.brief_description}
+                                                            <br />
+                                                            <strong>Project Link:</strong>{' '}
+                                                            {project.project_link ? (
+                                                                <a href={project.project_link}>{project.project_link}</a>
+                                                            ) : (
+                                                                'N/A'
+                                                            )}
+                                                            <br />
+                                                        </li>
                                                     ))}
                                                 </ul>
                                             </div>

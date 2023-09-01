@@ -149,36 +149,13 @@ const Dashboard = () => {
       </div>
 
       <div className="row bg-light">
-        {/* <div className="col-lg-6 col-md-12 mb-4">
-          <div className="col p-3">
-            <div className="container-fluid py-2"> */}
-              <p className="fs-4 mt-3">
-                Welcome, {userdata.username}
-              </p>
-              {/* <div className="d-flex justify-content-around px-2">
-                <div className="col mb-1 p-2">
-                  <div className="card bg-white">
-                    <div className="card-body">
-                      <h5 className="card-title"></h5>
-                      <h4 className="align-items-center fs-2">{}</h4>
-                    </div>
-                  </div>
-                </div>
-                <div className="col mb-1 p-2">
-                  <div className="card bg-white">
-                    <div className="card-body">
-                      <h5 className="card-title">Rating</h5>
-                      <h4 className="card-text fs-1">{rating}</h4>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
-            {/* </div>
-          </div>
-        </div> */}
+        <p className="fs-4 mt-3">
+          Welcome, {userdata.username}
+        </p>
 
         <div className="py-2 col-12">
-          <UploadResumeForm/>
+          <UploadResumeForm />
+          {error && <p>error</p>}
         </div>
 
       </div>

@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 
 function UploadResumeForm() {
   const [file, setFile] = useState<File | null>(null);
-
-  // quick fix hack for csrf for now..
   const [csrfToken, setCsrfToken] = useState<string>("");
+  const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const csrftoken = getCookie("csrftoken");
@@ -25,6 +24,7 @@ function UploadResumeForm() {
     event.preventDefault();
 
     if (file) {
+      setMessage("Please wait, it may take upto 30 seconds...");
       try {
         const formData = new FormData();
         formData.append("resume", file);
@@ -38,12 +38,12 @@ function UploadResumeForm() {
         });
 
         if (response.ok) {
-          console.log("File uploaded successfully");
+          setMessage("File uploaded successfully");
         } else {
-          console.error("Error uploading file");
+          setMessage("Error uploading file");
         }
-      } catch (error) {
-        console.error("An error occurred:", error);
+      } catch (error: any) {
+        setMessage("An error occurred: " + (error as Error).message);
       }
     }
   };
@@ -53,6 +53,7 @@ function UploadResumeForm() {
       <div className="px-5 container">
         <form onSubmit={handleSubmit} className="form col-6">
           <h2>Upload Resume</h2>
+          {message && <p>{message}</p>}
           <div className="form-group">
             <input type="file" accept=".pdf" onChange={handleFileChange} className="form-control" />
             <button type="submit" className="btn btn-primary mt-2">Extract</button>
