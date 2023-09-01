@@ -165,24 +165,24 @@ export default function ProfilePage({ userData, onClose }) {
                                             <div className="card-body">
                                                 <p className="card-text mb-4">Resume Scores</p>
 
-                                                <p className="card-text mt-4 mb-1" style={{ fontSize: '0.77rem' }}>Overall Score: {parsedData.overall_score}</p>
+                                                <p className="card-text mt-4 mb-1" style={{ fontSize: '0.77rem' }}>Overall Score: {userData.overall_score}</p>
                                                 <div className="progress rounded">
-                                                    <div className="progress-bar" role="progressbar" style={{ width: `${parsedData.overall_score}%` }} aria-valuenow={parsedData.overall_score} aria-valuemin="0" aria-valuemax="100">{parsedData.overall_score}%</div>
+                                                    <div className="progress-bar" role="progressbar" style={{ width: `${userData.overall_score}%` }} aria-valuenow={userData.overall_score} aria-valuemin="0" aria-valuemax="100">{parsedData.overall_score}%</div>
                                                 </div>
 
-                                                <p className="card-text mb-1" style={{ fontSize: '.77rem' }}>Completeness Score: {parsedData.completeness_score}</p>
+                                                <p className="card-text mb-1" style={{ fontSize: '.77rem' }}>Completeness Score: {userData.completeness_score}</p>
                                                 <div className="progress rounded">
-                                                    <div className="progress-bar" role="progressbar" style={{ width: parsedData.completeness_score+'%' }} aria-valuenow={parsedData.completeness_score} aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div className="progress-bar" role="progressbar" style={{ width: userData.completeness_score+'%' }} aria-valuenow={userData.completeness_score} aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
 
-                                                <p className="card-text mt-4 mb-1" style={{ fontSize: '.77rem' }}>Skills Score; {parsedData.skill_score}</p>
+                                                <p className="card-text mt-4 mb-1" style={{ fontSize: '.77rem' }}>Skills Score; {userData.skill_score}</p>
                                                 <div className="progress rounded">
-                                                    <div className="progress-bar" role="progressbar" style={{ width: parsedData.skill_score + '%' }} aria-valuenow={parsedData.skill_score} aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div className="progress-bar" role="progressbar" style={{ width: userData.skill_score + '%' }} aria-valuenow={userData.skill_score} aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
 
-                                                <p className="card-text mt-4 mb-1" style={{ fontSize: '.77rem' }}>Academic Score: {parsedData.academic_score}</p>
+                                                <p className="card-text mt-4 mb-1" style={{ fontSize: '.77rem' }}>Academic Score: {userData.academic_score}</p>
                                                 <div className="progress rounded">
-                                                    <div className="progress-bar" role="progressbar" style={{ width: parsedData.academic_score + '%' }} aria-valuenow={parsedData.academic_score} aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div className="progress-bar" role="progressbar" style={{ width: userData.academic_score + '%' }} aria-valuenow={userData.academic_score} aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -225,7 +225,7 @@ export default function ProfilePage({ userData, onClose }) {
                                         <div className="card mb-4 mb-md-0">
                                             <div className="card-body">
                                                 <p className="card-text mb-4">Summary: </p>
-                                                <p className="card-text mb-1" style={{ fontSize: '.77rem' }}>
+                                                <p className="card-text mb-1">
                                                     {parsedData.summary}
                                                 </p>
                                             </div>
