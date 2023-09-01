@@ -4,11 +4,11 @@ function UploadResumeForm() {
   const [file, setFile] = useState<File | null>(null);
 
   // quick fix hack for csrf for now..
-  const [csrfToken, setCsrfToken] = useState<string>(""); 
+  const [csrfToken, setCsrfToken] = useState<string>("");
 
   useEffect(() => {
     const csrftoken = getCookie("csrftoken");
-    let token = ""; 
+    let token = "";
     if (csrftoken !== undefined) {
       token = csrftoken;
     }

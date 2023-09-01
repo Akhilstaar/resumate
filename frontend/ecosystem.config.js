@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       script: 'npm',
-      args: 'start',
+      args: 'start',a
       watch: true,
       autorestart: true,
       env: {
