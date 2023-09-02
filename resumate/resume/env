@@ -1,3 +1,0 @@
-GPT_MODEL=gpt-3.5-turbo	
-OPENAI_API_KEY=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
-MODEL_ENDPOINT=/v1/chat/completions	

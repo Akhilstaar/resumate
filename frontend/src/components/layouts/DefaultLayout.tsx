@@ -1,19 +1,31 @@
 import React, { ReactNode } from "react";
 import Footer from "@/components/modules/Footer";
 import Header from "@/components/modules/Header";
+import Head from "next/head";
 
 interface DefaultLayoutProps {
   children: ReactNode;
+  title: string;
+  content: string;
 }
 
-const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
+const DefaultLayout: React.FC<DefaultLayoutProps> = ({ title, content, children }) => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <>
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content={content} />
+      </Head>
       <Header />
-      <div className="flex-grow">{children}</div>
+      <div className="container mt-5">{children}</div>
       <Footer />
-    </div>
+    </>
   );
+};
+
+DefaultLayout.defaultProps = {
+  title: "Superforecaster",
+  content: "",
 };
 
 export default DefaultLayout;

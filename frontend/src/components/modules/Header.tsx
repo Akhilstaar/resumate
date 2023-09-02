@@ -53,6 +53,14 @@ const Header: React.FC = () => {
             >
               Register
             </Link>
+            <Link
+              href="/adminlogin"
+              className={
+                router.pathname === "/adminlogin" ? "nav-link" : "active nav-link"
+              }
+            >
+              Admin Login 
+            </Link>
           </div>
         </div>
       </div>

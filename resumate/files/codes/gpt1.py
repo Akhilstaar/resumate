@@ -1,28 +1,28 @@
 import os
+import re
 import json
 import openai
 import numpy as np
-import re
+import pandas as pd
 from dotenv import load_dotenv
 import PyPDF2
 from pdfminer.high_level import extract_text
-from .models import ResumeData
-import pandas as pd
-# import time
+
 # env 
 load_dotenv()
+skills_db = pd.read_csv("skills.csv")
 openai.api_key = os.getenv("OPENAI_API_KEY")
 gpt_model = os.getenv("GPT_MODEL")
-skills_db = pd.read_csv("/home/aleatoryfreak/resumate/resumate/files/codes/skills.csv")
-system_function = os.getenv("SYSTEM_FUNCTION")
 
+# gpt_part
+system_prompt = "You are a resume parser. Your job will be to extract data from the resume into JSON format as per the syntax and instructions below.\n[output only JSON]\n[Formatting Instructions]\n====================\n{\"name\",\n\"phone_number\",\n\"email\",\n\"github_profile_link\",\n\"linkedin_profile_link\",\n\"field_of_study\",\n\"education\": [{\"degree\", \"institute\", \"year\", \"gpa\"}],\n\"achievements\",\n\"skills\": [] (You have to go through whole of resume and extract all possible and relevant skills from it),\n\"relevant_courses\": [],\n\"projects\": [{\"name\", \"organisation\", \"timeline\", \"brief_description\", \"project_link\"}],\n\"position_of_responsibilities\": [{\"position\", \"organisation\", \"tenure\", \"brief_description\"}],\n\"summary\": (You have to summarize the resume summing up all the relevant skills and qualities of the individual within 50 words)}\n===================="
 def get_resume(user_prompt, temp, output_limit):
     response = openai.ChatCompletion.create(
         model = gpt_model,
         messages = [
             {
                 "role": "system",
-                "content": system_function
+                "content": system_prompt
             },
             {
                 "role": "user",
@@ -37,7 +37,7 @@ def get_resume(user_prompt, temp, output_limit):
     return response.choices[0].message["content"]
 
 # generating usr_input from resume
-def addresumedatatodb(filename, FILEPATH):
+def generate_prompt(FILEPATH):
     txt = extract_text(FILEPATH)
     PDFFile = open(FILEPATH,'rb')
     PDF = PyPDF2.PdfReader(PDFFile)
@@ -48,7 +48,7 @@ def addresumedatatodb(filename, FILEPATH):
 
     links = []
     for page in range(pages):
-        # print("Current Page: {}".format(page))
+        print("Current Page: {}".format(page))
         pageSliced = PDF.pages[page]
         pageObject = pageSliced.get_object()
         if key in pageObject.keys():
@@ -60,17 +60,7 @@ def addresumedatatodb(filename, FILEPATH):
     link = "\n".join(links)
 
     prompt = txt + "\n" + link
-    response = get_resume(prompt, 0.5, 1800)
-    # response = open("/home/aleatoryfreak/resumate/resumate/files/codes/vll.txt", "r").read()
-    try:
-        s1, s2, s3, sf = score_resume(response)  
-    except Exception as e:
-        s1, s2, s3, sf = 0, 0, 0, 0
-    ress = '[' + response + ']'
-    userdata = ResumeData(uuid=filename, data=ress, skill_score=s1, completeness_score=s2, academic_score=s3, overall_score=sf)
-    userdata.save()
-
-    return response
+    return prompt
 
 # resume analysis 
 def get_skill_score(resume_data):

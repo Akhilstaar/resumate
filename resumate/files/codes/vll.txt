@@ -1,0 +1,108 @@
+{
+  "name": "Vipul Chanchlani",
+  "phone_number": "+91-9462150839",
+  "email": "vipulch21@iitk.ac.in",
+  "github_profile_link": "https://github.com/vipul124",
+  "linkedin_profile_link": "https://www.linkedin.com/in/vipul-chanchlani-61aa53227/",
+  "field_of_study": "Electrical Engineering",
+  "education": [
+    {
+      "degree": "B.Tech",
+      "institute": "Indian Institute of Technology Kanpur",
+      "year": "2021 - Present",
+      "gpa": "8.9/10"
+    },
+    {
+      "degree": "AISSCE (XII)",
+      "institute": "Sir Padampat Singhania School, Kota",
+      "year": "2021",
+      "gpa": "96%"
+    },
+    {
+      "degree": "AISSE (X)",
+      "institute": "Sir Padampat Singhania School, Kota",
+      "year": "2019",
+      "gpa": "94%"
+    }
+  ],
+  "achievements": [
+    "Received the Academic Excellence Award for exceptional academic performance for the academic year 2021-22",
+    "Secured All India Rank 1243 in JEE Advanced 2021 among 150,000+ shortlisted candidates from across the country",
+    "Secured All India Rank 1389 in JEE Main 2021 among 1,000,000+ applicants from across the country",
+    "Recipient of the Kishore Vaigyanik Protsahan Yojana (KVPY) Fellowship in 2021, with an All India Rank 966",
+    "Bagged Bronze Medal in Inter-IIT Tech Meet 11.0 in ’QuantInsti’s Efficacy of Price Action Trading Strategies’"
+  ],
+  "skills": [
+    "C",
+    "C++",
+    "Python",
+    "HTML",
+    "NumPy",
+    "Pandas",
+    "Matplotlib",
+    "Scikit-learn",
+    "TensorFlow",
+    "Selenium",
+    "transformers",
+    "Git",
+    "LATEX",
+    "SQLite"
+  ],
+  "relevant_courses": [
+    "Fundamentals of Computing",
+    "Probability and Statistics",
+    "Introduction to Electronics",
+    "Data Structure and Algorithms",
+    "Linear Algebra",
+    "Control Systems Analysis",
+    "Machine Learning Specialization*",
+    "Partial Differential Equations",
+    "Microelectronics I"
+  ],
+  "projects": [
+    {
+      "name": "Row Relation",
+      "organisation": "Prof. Tushar Sandhan",
+      "timeline": "Dec’22 - Ongoing",
+      "brief_description": "Creating a predictive ML model to analyse relationship between sentences & classify them into distinct topics",
+      "project_link": "https://github.com/vipul124/Row-Relation"
+    },
+    {
+      "name": "Mathematical Trading Strategies",
+      "organisation": "Stamatics, IIT Kanpur",
+      "timeline": "May’23 - Jul’23",
+      "brief_description": "Computed various metrics such as Sharpe Ratio and Drawdown for evaluating the performance of a trading strategy",
+      "project_link": ""
+    },
+    {
+      "name": "Efficacy of Price Action Trading Strategies",
+      "organisation": "Inter-IIT Tech Meet 11.0",
+      "timeline": "Jan’23 - Feb’23",
+      "brief_description": "Conducted a study on strategies in the Indian Equity Market, analysing various Candlestick Patterns and their efficiency",
+      "project_link": ""
+    },
+    {
+      "name": "Algorithmic Trading by Quantify Capital",
+      "organisation": "Finance and Analytics Club, IIT Kanpur",
+      "timeline": "Dec’22 - Ongoing",
+      "brief_description": "Developed and Implemented an Intraday Trading Strategy involving a careful stock selection based on historical data",
+      "project_link": ""
+    },
+    {
+      "name": "Number Theory & Cryptography",
+      "organisation": "Stamatics, IIT Kanpur",
+      "timeline": "Apr’22 - Jun’22",
+      "brief_description": "Acquired concepts of Number Theory including Primality Testing, Modular Arithmetic and Chinese Remainder Theorem",
+      "project_link": ""
+    }
+  ],
+  "position_of_responsibilities": [
+    {
+      "position": "Secretary",
+      "organisation": "Programming Club, IIT Kanpur",
+      "tenure": "Sep’22 - Apr’23",
+      "brief_description": "Helped in the conduction of contests, activities and workshops for programming enthusiasts across the campus community"
+    }
+  ],
+  "summary": "Third Year Undergraduate at Indian Institute of Technology Kanpur with a strong background in Electrical Engineering. Skilled in C, C++, Python, HTML, NumPy, Pandas, Matplotlib, Scikit-learn, TensorFlow, Selenium, transformers, Git, LATEX, and SQLite. Experienced in creating predictive ML models, evaluating trading strategies, and studying number theory and cryptography. Secretary of the Programming Club, IIT Kanpur, responsible for organizing contests and workshops for programming enthusiasts."
+}
