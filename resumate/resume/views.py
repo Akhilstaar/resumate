@@ -22,7 +22,6 @@ class ResumeDataSerializer(serializers.Serializer):
 class UploadResume(APIView):
     permission_classes = (permissions.AllowAny, )
 
-    @method_decorator(cache_page(30))  # Rate limit: 1 request per 30 seconds
     def post(self, request):
         try:
             uploaded_file = request.FILES.get('resume')

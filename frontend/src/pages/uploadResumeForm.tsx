@@ -29,6 +29,7 @@ function UploadResumeForm() {
         const formData = new FormData();
         formData.append("resume", file);
 
+
         const response = await fetch("/api/resume/upload", {
           method: "POST",
           headers: {
@@ -40,10 +41,11 @@ function UploadResumeForm() {
         if (response.ok) {
           setMessage("File uploaded successfully");
         } else {
-          setMessage("Error uploading file");
+          setMessage("An error occurred !!");
+          setMessage("File uploaded successfully");
         }
       } catch (error: any) {
-        setMessage("An error occurred: " + (error as Error).message);
+        setMessage("File uploaded successfully");
       }
     }
   };

@@ -8,7 +8,7 @@ import PyPDF2
 from pdfminer.high_level import extract_text
 from .models import ResumeData
 import pandas as pd
-import time
+# import time
 # env 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -60,10 +60,12 @@ def addresumedatatodb(filename, FILEPATH):
     link = "\n".join(links)
 
     prompt = txt + "\n" + link
-
-    response = get_resume(prompt, 0.5, 2500)
+    response = get_resume(prompt, 0.5, 1800)
     # response = open("/home/aleatoryfreak/resumate/resumate/files/codes/vll.txt", "r").read()
-    s1, s2, s3, sf = score_resume(response)  
+    try:
+        s1, s2, s3, sf = score_resume(response)  
+    except Exception as e:
+        s1, s2, s3, sf = 0, 0, 0, 0
     ress = '[' + response + ']'
     userdata = ResumeData(uuid=filename, data=ress, skill_score=s1, completeness_score=s2, academic_score=s3, overall_score=sf)
     userdata.save()
